@@ -30,6 +30,14 @@ services:
     networks:
       - sportstats-net
 
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+
 volumes:
   pg_data:
 

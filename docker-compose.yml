@@ -2,36 +2,37 @@ services:
   api:
     build: .
     container_name: sportstats_api
-    comand: poetry run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    command: poetry run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
     depends_on:
       - db
     environment:
       #Config de conexão com o banco
-      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5433/sportstats
+      DATABASE_URL: ${DATABASE_URL}
     volumes:
-      - .:/app
+      - ./src:/app/src
     networks:
-      - sportstats_net
+      - sportstats-net
 
   db:
     image: postgres:15
     container_name: sportstats_db
     restart: always
-    enviroment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: sportstats
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5432:5433"
+      - "5433:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
-      - sportstats_net
+      - sportstats-net
 
 volumes:
   pg_data:
 
 networks:
-  sportstats_net:
+  sportstats-net:
+    driver: bridge

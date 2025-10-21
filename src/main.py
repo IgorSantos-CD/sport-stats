@@ -1,5 +1,10 @@
 from fastapi import FastAPI
-app = FastAPI()
+from src.api.routes import routes_health
+
+
+app = FastAPI(title="Sport-Stats API")
+
+app.include_router(routes_health.router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():
